@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="2026 年 7 月 14 日至 19 日学习总结：Autoware、RoboBus、Linux、CycloneDDS、TF、MCAP 与数据闭环。">
+  <meta name="theme-color" content="#14281c">
+  <title>7.14—7.19 周知识专题｜Shirley Knowledge</title>
+  <style>
+    :root {
+      --bg:#f5f7f4; --surface:#fff; --surface-2:#edf1eb; --text:#172018;
+      --muted:#657066; --line:#dce3db; --accent:#155f3b; --accent-2:#0d472b;
+      --highlight:#d9f266; --danger:#a43b31; --code:#112019;
+      --shadow:0 16px 44px rgba(24,43,31,.1); --radius:20px;
+    }
+    [data-theme="dark"] {
+      --bg:#0e1410; --surface:#151d17; --surface-2:#1d2820; --text:#edf3ed;
+      --muted:#a8b4aa; --line:#2c392f; --accent:#7fd5a5; --accent-2:#a9e5c1;
+      --code:#09100c; --danger:#ff9c91; --shadow:0 18px 52px rgba(0,0,0,.26);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.75}
+    a{color:inherit;text-decoration:none} button{font:inherit;cursor:pointer}
+    code,kbd{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+    .shell{width:min(1180px,calc(100% - 40px));margin:auto}
+    .topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid color-mix(in srgb,var(--line) 72%,transparent);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px)}
+    .nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850}.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:12px;background:var(--text);color:var(--highlight);font:700 14px ui-monospace,monospace}
+    .nav-actions{display:flex;align-items:center;gap:9px}.back{padding:9px 13px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:14px}.theme{width:40px;height:40px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text)}
+    .hero{margin:32px auto 24px;padding:clamp(34px,6vw,70px);border-radius:30px;background:#14281c;color:#f4f8f4;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .hero:after{content:"";position:absolute;width:330px;height:330px;right:-95px;top:-130px;border:68px solid rgba(217,242,102,.13);border-radius:50%}
+    .eyebrow{margin:0 0 14px;color:var(--highlight);font:750 13px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}
+    h1{position:relative;z-index:1;max-width:850px;margin:0;font-size:clamp(38px,6vw,68px);line-height:1.06;letter-spacing:-.05em}
+    .hero p:last-child{max-width:720px;margin:20px 0 0;color:#bdcbbf;font-size:18px}
+    .summary{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:30px}.summary a{padding:17px 13px;border:1px solid var(--line);border-radius:15px;background:var(--surface);text-align:center;font-size:13px;color:var(--muted);transition:.18s}.summary a:hover{transform:translateY(-2px);border-color:var(--accent);color:var(--text)}.summary strong{display:block;color:var(--accent-2);font-size:18px}
+    .layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:34px;align-items:start}.toc{position:sticky;top:92px}.toc-title{margin:0 0 10px;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}.toc nav{display:grid;gap:5px}.toc a{padding:9px 12px;border-radius:10px;color:var(--muted);font-size:14px}.toc a:hover{background:var(--surface-2);color:var(--text)}
+    article section{scroll-margin-top:94px;margin-bottom:52px}h2{margin:0 0 8px;font-size:clamp(27px,4vw,39px);line-height:1.2;letter-spacing:-.04em}h3{margin:28px 0 10px;font-size:21px;letter-spacing:-.02em}p{margin:9px 0}.lead{margin:0 0 20px;color:var(--muted)}
+    .panel{margin:18px 0;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+    .note{margin:18px 0;padding:16px 18px;border-left:4px solid var(--accent);border-radius:0 13px 13px 0;background:var(--surface-2)}.note strong{color:var(--accent-2)}.warning{border-left-color:var(--danger)}.warning strong{color:var(--danger)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mini{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.mini h3{margin:0 0 6px;font-size:17px}.mini p{margin:0;color:var(--muted);font-size:14px}
+    table{width:100%;border-collapse:separate;border-spacing:0;margin:16px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);font-size:14px}th,td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface-2);color:var(--accent-2)}tr:last-child td{border-bottom:0}
+    pre{position:relative;margin:15px 0;padding:18px;overflow:auto;border:1px solid #284132;border-radius:15px;background:var(--code);color:#d8eadc;line-height:1.6;font-size:13px}pre code{white-space:pre}p code,li code,td code{padding:2px 6px;border-radius:6px;background:var(--surface-2);color:var(--accent-2);font-size:.92em}
+    ul,ol{padding-left:22px}li{margin:7px 0}.muted{color:var(--muted)}
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;counter-reset:step}.flow div{position:relative;padding:18px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);counter-increment:step}.flow div:before{content:"0" counter(step);display:block;margin-bottom:12px;color:var(--accent);font:800 13px ui-monospace,monospace}.flow div:not(:last-child):after{content:"→";position:absolute;right:-13px;top:50%;z-index:2;width:24px;height:24px;border:1px solid var(--line);border-radius:50%;background:var(--bg);color:var(--accent);text-align:center;line-height:21px}.flow strong{display:block}.flow small{color:var(--muted)}
+    .timeline{border-left:2px solid var(--line);margin:18px 0 0 8px;padding-left:24px}.time{position:relative;margin:0 0 20px;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.time:before{content:"";position:absolute;left:-31px;top:24px;width:12px;height:12px;border:3px solid var(--bg);border-radius:50%;background:var(--accent)}.time strong{color:var(--accent-2)}
+    footer{margin-top:40px;padding:30px 0 44px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.foot{display:flex;justify-content:space-between;gap:18px}
+    @media(max-width:900px){.summary{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:1fr}.toc{position:static;overflow-x:auto}.toc-title{display:none}.toc nav{display:flex;min-width:max-content}.flow{grid-template-columns:1fr 1fr}.flow div:after{display:none}}
+    @media(max-width:560px){.shell{width:min(100% - 24px,1180px)}.hero{margin-top:18px;padding:30px 22px}.summary{grid-template-columns:repeat(2,1fr)}.grid,.flow{grid-template-columns:1fr}table{display:block;overflow-x:auto}.back{display:none}.foot{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav shell" aria-label="页面导航">
+      <a class="brand" href="../index.html"><span class="brand-mark">SK</span><span>Shirley Knowledge</span></a>
+      <div class="nav-actions"><a class="back" href="../index.html">← 返回知识库</a><button class="theme" id="themeToggle" aria-label="切换深色模式">◐</button></div>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Weekly review · 2026.07.14—07.19</p>
+      <h1>从环境搭建，走到自动驾驶数据闭环。</h1>
+      <p>本周知识覆盖 Autoware 环境、RoboBus 运维、Linux 远程操作、Failcase 分析、CycloneDDS、TF、MCAP 与 Issue 跟踪。</p>
+    </section>
+
+    <nav class="summary" aria-label="本周知识模块">
+      <a href="#environment"><strong>01</strong>环境排障</a>
+      <a href="#robobus"><strong>02</strong>RoboBus</a>
+      <a href="#data-review"><strong>03</strong>数据回放</a>
+      <a href="#middleware"><strong>04</strong>DDS 与网络</a>
+      <a href="#tf-mcap"><strong>05</strong>TF 与 MCAP</a>
+      <a href="#workflow"><strong>06</strong>数据闭环</a>
+    </nav>
+
+    <div class="layout">
+      <aside class="toc">
+        <p class="toc-title">本页目录</p>
+        <nav>
+          <a href="#environment">7/14 · Autoware 环境</a>
+          <a href="#robobus">7/15 · RoboBus 运维</a>
+          <a href="#data-review">7/16 · Failcase 与回放</a>
+          <a href="#middleware">7/17 · Docker 与 DDS</a>
+          <a href="#tf-mcap">7/18—19 · TF 与 MCAP</a>
+          <a href="#workflow">数据处理闭环</a>
+          <a href="#commands">命令速查</a>
+        </nav>
+      </aside>
+
+      <article>
+        <section id="environment">
+          <h2>01｜Autoware 环境与问题定位</h2>
+          <p class="lead">目标环境：Ubuntu 22.04、ROS 2 Humble，通过 VS Code Remote-SSH 在远端主机执行安装与调试。</p>
+
+          <h3>先判断“命令到底在哪台机器上执行”</h3>
+          <div class="grid">
+            <div class="mini"><h3>本地 Windows</h3><p>负责 VS Code 界面、浏览器、部分代理软件；不能把它的路径和端口直接当成远端 Ubuntu 的环境。</p></div>
+            <div class="mini"><h3>远端 Ubuntu</h3><p>终端提示符、APT、ROS 2、Autoware 与 Git 实际运行的位置；代理变量也必须在这台机器上有效。</p></div>
+          </div>
+          <pre><code>hostname
+echo "$SSH_CONNECTION"
+pwd
+printenv | grep -i proxy</code></pre>
+
+          <h3>四层排障思路</h3>
+          <table>
+            <thead><tr><th>层级</th><th>典型现象</th><th>检查重点</th></tr></thead>
+            <tbody>
+              <tr><td>软件源</td><td>APT 403、InRelease 或签名错误</td><td>检查是否仍使用失效的 HTTP 源或旧缓存配置；这类问题不等同于 Autoware 自身故障。</td></tr>
+              <tr><td>权限</td><td>Permission denied、Docker socket 无权限</td><td>确认当前用户、文件权限、用户组与服务状态。</td></tr>
+              <tr><td>代理</td><td>Connection refused</td><td>检查 Git 和环境变量是否残留旧代理，例如旧主机地址与端口。</td></tr>
+              <tr><td>网络链路</td><td>TLS timeout、连接被重置</td><td>用最小请求分别验证 DNS、TCP 443、HTTPS 和 GitHub API。</td></tr>
+            </tbody>
+          </table>
+          <pre><code>git config --global --get http.proxy
+git config --global --get https.proxy
+curl -I https://github.com
+git ls-remote https://github.com/acados/acados.git</code></pre>
+          <div class="note warning"><strong>关键认识：</strong>代理必须对“正在执行命令的那台机器”可达。Windows 上的代理在另一台电脑或另一系统中运行时，远端 Ubuntu 不能直接使用它的 <code>127.0.0.1</code>。</div>
+
+          <h3>Markdown 与 VS Code Remote</h3>
+          <ul>
+            <li>VS Code 预览 Markdown：<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>。</li>
+            <li>侧边预览：先按 <kbd>Ctrl</kbd> + <kbd>K</kbd>，再按 <kbd>V</kbd>。</li>
+            <li>终端查看：<code>less README.md</code>；退出按 <kbd>q</kbd>。</li>
+            <li>Remote-SSH 状态可以通过左下角远程标识、<code>hostname</code> 和 <code>SSH_CONNECTION</code> 共同确认。</li>
+          </ul>
+        </section>
+
+        <section id="robobus">
+          <h2>02｜RoboBus 系统与日常运维</h2>
+          <p class="lead">核心是先识别目标车辆与设备角色，再启动软件，避免连错 Wi-Fi 或控制到其他车辆。</p>
+
+          <h3>核心设备拓扑</h3>
+          <table>
+            <thead><tr><th>设备</th><th>IP</th><th>主要作用</th></tr></thead>
+            <tbody>
+              <tr><td>IPC</td><td><code>&lt;IPC_IP&gt;</code></td><td>车载工控机，运行相关服务并参与数据处理。</td></tr>
+              <tr><td>ORIN</td><td><code>&lt;ORIN_IP&gt;</code></td><td>NVIDIA 计算平台，承担自动驾驶核心计算任务。</td></tr>
+              <tr><td>第二台 IPC</td><td><code>&lt;SECOND_IPC_IP&gt;</code></td><td>承担独立服务或数据链路任务。</td></tr>
+            </tbody>
+          </table>
+
+          <h3>自驾维护终端启动流程</h3>
+          <div class="flow">
+            <div><strong>确认车辆</strong><small>核对 Wi-Fi 与目标车辆</small></div>
+            <div><strong>智能重连</strong><small>IPC、ORIN、ROS 全部在线</small></div>
+            <div><strong>检查版本</strong><small>选择团队指定的稳定版本</small></div>
+            <div><strong>启动与观察</strong><small>选服务，关闭 HMI，打开 RViz</small></div>
+          </div>
+          <div class="note warning"><strong>操作注意：</strong>GNSS 指标低于团队有效性阈值时不作为可靠参考；任何启动操作前都先确认车辆与网络。</div>
+
+          <h3>网络状态检查</h3>
+          <pre><code>ping -c 4 &lt;ORIN_IP&gt;
+hostname
+ip -br addr
+ip route</code></pre>
+          <p><code>ping</code> 检查连通性；<code>ip -br addr</code> 快速查看网卡地址；<code>ip route</code> 判断数据从哪张网卡和哪个网关发送。</p>
+
+          <h3>NoMachine、SSH 与 SCP</h3>
+          <ol>
+            <li>用 NoMachine 远程进入 IPC，并在车辆运行时录制屏幕。</li>
+            <li>在本机通过 SSH 登录 IPC，使用 <code>pwd</code>、<code>ls -lh</code> 确认文件路径和大小。</li>
+            <li>退出远端终端，在本机终端执行 SCP，把视频拉到本地。</li>
+          </ol>
+          <pre><code>ssh ipc@&lt;IPC_IP&gt;
+pwd
+ls -lh ~/Videos
+exit
+
+# 在本机执行；带空格的文件名要加引号
+scp "ipc@&lt;IPC_IP&gt;:~/Videos/&lt;录屏文件&gt;.mp4" .</code></pre>
+
+          <h3>安全删除原则</h3>
+          <pre><code>ls -lh                     # 删除前先核对
+rm -i 文件名               # 交互确认后删除文件
+rmdir 空文件夹             # 只删除空目录
+rm -ri 文件夹              # 递归且逐项确认，谨慎使用
+cd ..                      # 返回上一级</code></pre>
+          <div class="note"><strong>GNSS 与 PPS：</strong>GNSS 提供定位和高精度时间来源；PPS 每秒给出一次精确脉冲，用于让相机、雷达、工控机等设备尽量使用同一时间基准。</div>
+        </section>
+
+        <section id="data-review">
+          <h2>03｜Failcase、Lichtblick 与软件安装</h2>
+          <p class="lead">排查自动驾驶异常时，不只看最后车辆表现，而是沿数据链追踪“最早从哪里开始出错”。</p>
+
+          <h3>Failcase 判断逻辑</h3>
+          <div class="grid">
+            <div class="mini"><h3>感知问题</h3><p>障碍物漏检、误检、类别或位置错误。重点关注影响行驶的近处目标，例如三轮车或公交车局部特征。</p></div>
+            <div class="mini"><h3>规划问题</h3><p>感知结果正确，但路径、速度或避障决策不合理。</p></div>
+            <div class="mini"><h3>控制问题</h3><p>规划指令合理，但车辆转向、加速或制动执行偏差。</p></div>
+            <div class="mini"><h3>定位问题</h3><p>车辆位姿、地图匹配或坐标关系异常，进而影响后续模块。</p></div>
+          </div>
+          <div class="note"><strong>判断原则：</strong>找到时间线上“最早出现错误的模块”，而不是只根据最后的急刹、偏航等结果下结论。</div>
+
+          <h3>查找与检查录制数据</h3>
+          <pre><code>find ~/ -type f \( -name "*.mcap" -o -name "*.db3" \) 2&gt;/dev/null
+ros2 bag info &lt;数据包路径&gt;</code></pre>
+          <p>Lichtblick 常用面板：</p>
+          <ul>
+            <li><strong>Topics：</strong>查看数据包内有哪些 ROS 话题。</li>
+            <li><strong>Problems：</strong>查看解析和数据异常提示。</li>
+            <li><strong>Raw Messages：</strong>检查消息字段的原始值。</li>
+            <li><strong>Image / 3D：</strong>查看相机画面、点云和空间目标。</li>
+            <li><strong>Plot：</strong>观察速度、转角、加速度等变量随时间变化。</li>
+          </ul>
+
+          <h3>Linux 下载与安装软件</h3>
+          <pre><code>wget &lt;下载地址&gt;
+curl -LO &lt;下载地址&gt;
+sudo apt install ./软件包.deb
+sudo dpkg -i 软件包.deb
+sudo apt --fix-broken install</code></pre>
+          <p>优先使用 <code>apt install ./package.deb</code>，因为它能同时处理依赖；<code>dpkg -i</code> 遇到缺少依赖后，再用 <code>apt --fix-broken install</code> 修复。</p>
+
+          <h3>物联网卡续费检查</h3>
+          <ol>
+            <li>确认车辆、卡号、套餐、到期时间和下月是否继续使用。</li>
+            <li>整理待续费清单，避免漏卡或重复续费。</li>
+            <li>按公司流程提交申请并拟定续费合同。</li>
+            <li>完成后登记续费结果和新的有效期。</li>
+          </ol>
+        </section>
+
+        <section id="middleware">
+          <h2>04｜Docker、DDS、CycloneDDS 与 Tailscale</h2>
+          <p class="lead">这一部分连接了容器运行环境、ROS 2 通信中间件与远程组网。</p>
+
+          <h3>Docker 权限与进入容器</h3>
+          <pre><code>groups
+ls -l /var/run/docker.sock
+docker version
+cd ~/docker
+ls -l scripts
+./scripts/docker_into.sh</code></pre>
+          <ul>
+            <li>出现 Docker socket 的 <code>permission denied</code> 时，先检查当前用户是否属于 <code>docker</code> 组。</li>
+            <li>脚本说明与实际文件名可能不同；先用 <code>ls</code> 核对。实际进入脚本是 <code>docker_into.sh</code>。</li>
+            <li>进入容器后仍需确认 ROS 2 和 CycloneDDS 环境变量，而不是只看“进入成功”。</li>
+          </ul>
+          <pre><code>echo "$RMW_IMPLEMENTATION"
+echo "$CYCLONEDDS_URI"
+printenv | grep -E 'RMW|CYCLONE'</code></pre>
+
+          <h3>DDS 与 CycloneDDS 是什么</h3>
+          <table>
+            <thead><tr><th>概念</th><th>含义</th></tr></thead>
+            <tbody>
+              <tr><td>DDS</td><td>ROS 2 底层使用的数据分发标准，负责节点发现、发布/订阅和通信质量策略（QoS）。</td></tr>
+              <tr><td>CycloneDDS</td><td>DDS 标准的一种具体实现；ROS 2 通过 RMW 层调用它完成网络通信。</td></tr>
+              <tr><td>RMW</td><td>ROS Middleware 接口层，让 ROS 2 可以切换不同 DDS 实现。</td></tr>
+              <tr><td>QoS</td><td>控制可靠性、历史深度、耐久性和实时性等通信行为。</td></tr>
+            </tbody>
+          </table>
+          <p>“绑定网卡”是告诉 CycloneDDS 使用哪张网卡发送和接收 ROS 2 数据，避免它错误选择 Wi-Fi、Docker、Tailscale 或其他虚拟网卡。绑定错误时，节点可能互相发现不到，或出现数据不通、丢包和延迟。</p>
+          <div class="note"><strong>理解链路：</strong>ROS 2 节点 → RMW 接口 → CycloneDDS → 指定网卡 → 其他设备上的 ROS 2 节点。</div>
+
+          <h3>Tailscale 排查</h3>
+          <pre><code>tailscale status
+systemctl status tailscaled
+ls -l /var/run/tailscale/tailscaled.sock
+sudo tailscale up --authkey &lt;你的密钥&gt;</code></pre>
+          <ul>
+            <li>客户端命令依赖 <code>tailscaled</code> 后台服务和 socket；socket 不存在时，单独执行 <code>tailscale up</code> 不会成功。</li>
+            <li>避免 Snap 与 APT 两套 Tailscale 同时安装，以免服务、路径和 socket 冲突。</li>
+            <li>Auth Key 属于敏感凭据，不要写进知识库、脚本、截图或公开仓库；如果泄露，应立即撤销并重新生成。</li>
+          </ul>
+        </section>
+
+        <section id="tf-mcap">
+          <h2>05｜TF、TF 树与 MCAP</h2>
+          <p class="lead">TF 解决“各传感器和车辆坐标之间是什么关系”，MCAP 解决“如何把运行中的多类 ROS 数据完整保存下来”。</p>
+
+          <h3>TF 与 TF 树</h3>
+          <p>TF 用来描述两个坐标系之间的<strong>位置和平移关系</strong>以及<strong>姿态和旋转关系</strong>。多个父子坐标系连接后形成 TF 树。</p>
+          <table>
+            <thead><tr><th>坐标系</th><th>作用</th></tr></thead>
+            <tbody>
+              <tr><td><code>map</code></td><td>全局固定参考坐标系，通常位于 TF 树较高层，用于表达车辆在地图中的位置。</td></tr>
+              <tr><td><code>odom</code></td><td>局部连续坐标系，短时间运动连续，但可能逐渐漂移。</td></tr>
+              <tr><td><code>base_link</code></td><td>车辆主体参考坐标系；具体原点由车型定义，常位于车体中心或后轴中心附近。</td></tr>
+              <tr><td>传感器坐标系</td><td>相机、激光雷达、IMU 等相对 <code>base_link</code> 的安装位置和方向。</td></tr>
+            </tbody>
+          </table>
+          <p>TF 树不一定永远由同一个坐标系作为最大父节点，但自动驾驶常见层级是 <code>map → odom → base_link → sensors</code>。</p>
+
+          <h3>三轴加速度与三轴角速度</h3>
+          <ul>
+            <li><strong>三轴加速度：</strong>沿 X、Y、Z 三个方向的线性加速度，反映前后、左右、上下运动变化。</li>
+            <li><strong>三轴角速度：</strong>绕 X、Y、Z 三个轴的旋转速度，常对应 roll、pitch、yaw 方向变化。</li>
+          </ul>
+
+          <h3>MCAP</h3>
+          <p>MCAP 是适合机器人和自动驾驶数据的日志容器格式。它可以在同一份录制中保存：</p>
+          <div class="grid">
+            <div class="mini"><h3>传感器</h3><p>相机图像、激光雷达点云、IMU、GNSS。</p></div>
+            <div class="mini"><h3>车辆状态</h3><p>速度、转角、加速度、底盘反馈。</p></div>
+            <div class="mini"><h3>算法结果</h3><p>定位、TF、感知目标、规划轨迹、控制指令。</p></div>
+            <div class="mini"><h3>系统信息</h3><p>诊断、日志和其他 ROS 话题消息。</p></div>
+          </div>
+          <p><strong>rosbag</strong> 是 ROS 的录制与回放工具体系，<strong>MCAP</strong> 是 rosbag 可使用的一种存储格式，两者不是完全对立的概念。</p>
+          <pre><code>ros2 bag info &lt;MCAP数据目录或文件&gt;
+ros2 bag play &lt;数据包路径&gt;</code></pre>
+        </section>
+
+        <section id="workflow">
+          <h2>06｜数据处理闭环与 Issue</h2>
+          <p class="lead">目标是打通“数据上传—异常筛选—场景包制作—算法消费”的标准化链路。</p>
+
+          <h3>完整数据链路</h3>
+          <div class="timeline">
+            <div class="time"><strong>1｜车辆运行与录制</strong><br><span class="muted">将关键 ROS 话题录制为 MCAP/rosbag 数据。</span></div>
+            <div class="time"><strong>2｜Lichtblick 回放</strong><br><span class="muted">查看图像、点云、Plot、Raw Messages，定位异常发生时间。</span></div>
+            <div class="time"><strong>3｜异常筛选</strong><br><span class="muted">优先保留影响自动驾驶的近处障碍物漏检；远处或对向车道且不影响驾驶的事件暂缓。</span></div>
+            <div class="time"><strong>4｜切割场景包</strong><br><span class="muted">按团队的数据时长规范切割，只保留复现异常所需的最小片段。</span></div>
+            <div class="time"><strong>5｜上传并绑定 Issue</strong><br><span class="muted">证据、数据和责任人统一进入工单入口，避免平台割裂。</span></div>
+            <div class="time"><strong>6｜算法复现与反馈</strong><br><span class="muted">算法人员消费数据、分析根因，并把结果回填到 Issue。</span></div>
+          </div>
+
+          <h3>Issue 在这里代表什么</h3>
+          <p>Issue 不只是“软件报错”，而是一条可持续跟踪的任务记录，它把一次异常从发现到关闭的必要材料绑定在一起：</p>
+          <table>
+            <thead><tr><th>字段</th><th>内容</th></tr></thead>
+            <tbody>
+              <tr><td>异常描述</td><td>车辆表现、可能所属模块、影响程度。</td></tr>
+              <tr><td>时间与数据</td><td>异常时间点、原始包和按规范生成的最小切割包。</td></tr>
+              <tr><td>证据</td><td>截图、录屏、关键话题、波形或标注。</td></tr>
+              <tr><td>责任与状态</td><td>认领人、处理进度、优先级和当前状态。</td></tr>
+              <tr><td>分析结论</td><td>根因、修复方案、验证结果与是否关闭。</td></tr>
+            </tbody>
+          </table>
+
+          <h3>平台集成思路</h3>
+          <p>以工单系统为统一入口：用户认领任务后，通过链接打开数据播放器，在回放同时完成证据标注和上传，所有数据最终回到同一个 Issue 中。</p>
+
+          <div class="note warning"><strong>安全原则：</strong>操作车辆、设备、数据和账号前确认授权范围；遇到异常先停止可能扩大风险的操作，保留现场和日志，再上报处理。涉及密钥、密码和内部地址时不得公开上传。</div>
+        </section>
+
+        <section id="commands">
+          <h2>本周命令速查</h2>
+          <table>
+            <thead><tr><th>命令</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td><code>pwd / cd / ls</code></td><td>查看当前位置、切换目录、检查文件。</td></tr>
+              <tr><td><code>mkdir / rmdir</code></td><td>创建目录、删除空目录。</td></tr>
+              <tr><td><code>rm -i / rm -ri</code></td><td>交互确认删除文件或目录，降低误删风险。</td></tr>
+              <tr><td><code>ssh</code></td><td>远程登录 IPC 或其他 Linux 主机。</td></tr>
+              <tr><td><code>scp</code></td><td>在本机和远端之间安全复制文件。</td></tr>
+              <tr><td><code>ping / ip -br addr / ip route</code></td><td>检查设备连通、网卡地址和路由。</td></tr>
+              <tr><td><code>wget / curl</code></td><td>从终端下载或验证网络资源。</td></tr>
+              <tr><td><code>ros2 bag info</code></td><td>查看 rosbag/MCAP 的话题、时长与元数据。</td></tr>
+              <tr><td><code>groups / ls -l /var/run/docker.sock</code></td><td>排查 Docker 用户组与 socket 权限。</td></tr>
+              <tr><td><code>systemctl status</code></td><td>检查 tailscaled 等 systemd 服务状态。</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer><div class="shell foot"><span>© <span id="year"></span> Shirley · 本周学习知识专题</span><a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">返回顶部 ↑</a></div></footer>
+  <script>
+    const root=document.documentElement,button=document.getElementById('themeToggle');
+    const saved=localStorage.getItem('kb-theme');
+    if(saved==='dark'||(!saved&&matchMedia('(prefers-color-scheme: dark)').matches))root.dataset.theme='dark';
+    button.addEventListener('click',()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;localStorage.setItem('kb-theme',next)});
+    document.getElementById('year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>
