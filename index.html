@@ -282,7 +282,7 @@
         <a href="#notes">学习笔记</a>
         <a href="#robobus">RoboBus</a>
         <a href="#linux">Linux</a>
-        <a href="https://github.com/shirleyjiang233-dev/jxy" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a href="https://github.com/xiangyi-jiang233/jxy" target="_blank" rel="noreferrer">GitHub ↗</a>
       </div>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="切换深色模式" title="切换深色模式">◐</button>
     </nav>
@@ -301,8 +301,8 @@
     </section>
 
     <section class="stats" aria-label="知识库统计">
-      <div class="stat"><strong>4</strong><span>知识主题</span></div>
-      <div class="stat"><strong>7</strong><span>常用命令</span></div>
+      <div class="stat"><strong>10+</strong><span>知识主题</span></div>
+      <div class="stat"><strong>25+</strong><span>常用命令</span></div>
       <div class="stat"><strong>3</strong><span>核心设备</span></div>
       <div class="stat"><strong>持续</strong><span>整理与更新</span></div>
     </section>
@@ -311,7 +311,7 @@
       <aside class="sidebar" aria-label="内容目录">
         <p class="side-title">知识分类</p>
         <nav class="side-nav">
-          <a href="#notes">最新笔记 <span>04</span></a>
+          <a href="#notes">最新笔记 <span>07</span></a>
           <a href="#robobus">RoboBus <span>01</span></a>
           <a href="#linux">Linux <span>07</span></a>
           <a href="#about">关于本站</a>
@@ -328,32 +328,60 @@
           </div>
 
           <div class="card-grid" id="noteGrid">
+            <article class="card searchable" data-keywords="周报 7月14 7月19 autoware robobus linux failcase lichtblick docker cyclonedds tf mcap issue">
+              <span class="tag">周知识专题</span>
+              <h3>7.14—7.19：从环境搭建到数据闭环</h3>
+              <p>完整整理上周的 Autoware、RoboBus、Linux、DDS、TF、MCAP、Issue 与数据处理知识。</p>
+              <div class="card-meta"><span>2026-07-14—19 · 完整专题</span><a class="arrow" href="notes/week-2026-07-14-19.html">阅读全文 →</a></div>
+            </article>
+
             <article class="card searchable" data-keywords="robobus 自驾 维护 终端 ipc orin wifi rviz hmi">
               <span class="tag">RoboBus</span>
               <h3>RoboBus 自驾维护终端操作流程</h3>
               <p>连接正确车辆、检查 IPC / ORIN / ROS 在线状态，选择版本并启动自驾服务。</p>
-              <div class="card-meta"><span>2026-07-15 · 6 分钟</span><a class="arrow" href="#robobus">阅读 →</a></div>
+              <div class="card-meta"><span>2026-07-15 · 6 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#robobus">阅读 →</a></div>
             </article>
 
             <article class="card searchable" data-keywords="ssh scp windows ipc 视频 远程 文件 传输">
               <span class="tag">远程连接</span>
               <h3>从 IPC 安全拉取录屏文件</h3>
               <p>用 SSH 确认文件路径，再通过 SCP 将 NoMachine 录制的视频传到 Windows 本机。</p>
-              <div class="card-meta"><span>2026-07-15 · 4 分钟</span><span class="arrow">整理中</span></div>
+              <div class="card-meta"><span>2026-07-15 · 4 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#robobus">阅读 →</a></div>
             </article>
 
             <article class="card searchable" data-keywords="linux pwd cd ls mkdir rm 删除 文件夹 返回上一级">
               <span class="tag">Linux</span>
               <h3>Linux 文件与目录操作速查</h3>
               <p>常用命令的作用、使用场景和安全提醒，尤其注意 rm 与 rm -r 的区别。</p>
-              <div class="card-meta"><span>2026-07-15 · 5 分钟</span><a class="arrow" href="#linux">速查 →</a></div>
+              <div class="card-meta"><span>2026-07-15 · 5 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#commands">速查 →</a></div>
             </article>
 
             <article class="card searchable" data-keywords="ros2 autoware acados git tls gnutls 网络 失败">
               <span class="tag">ROS 2</span>
               <h3>依赖拉取失败：从 TLS 错误定位网络问题</h3>
               <p>理解 Git 拉取失败与代理、网络稳定性之间的关系，并建立从现象到原因的排查思路。</p>
-              <div class="card-meta"><span>2026-07-14 · 8 分钟</span><span class="arrow">整理中</span></div>
+              <div class="card-meta"><span>2026-07-14 · 8 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#environment">阅读 →</a></div>
+            </article>
+
+            <article class="card searchable" data-keywords="cyclonedds dds rmw qos 网卡绑定 docker tailscale">
+              <span class="tag">ROS 2 通信</span>
+              <h3>DDS、CycloneDDS 与网卡绑定</h3>
+              <p>理解 ROS 2 的通信链路、RMW、QoS，以及为什么多网卡环境需要指定通信接口。</p>
+              <div class="card-meta"><span>2026-07-17 · 10 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#middleware">阅读 →</a></div>
+            </article>
+
+            <article class="card searchable" data-keywords="tf tf树 map odom base_link imu 三轴 加速度 角速度 mcap rosbag">
+              <span class="tag">数据与坐标系</span>
+              <h3>TF、TF 树与 MCAP 基础</h3>
+              <p>理解车辆坐标关系、IMU 三轴数据，以及自动驾驶多话题日志的录制与回放。</p>
+              <div class="card-meta"><span>2026-07-18—19 · 9 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#tf-mcap">阅读 →</a></div>
+            </article>
+
+            <article class="card searchable" data-keywords="数据闭环 issue 工单 异常筛选 场景包 20秒 算法 复现">
+              <span class="tag">数据流程</span>
+              <h3>异常数据闭环与 Issue 跟踪</h3>
+              <p>从车辆录制、回放筛选、规范化切割、证据上传到算法复现与结果回填。</p>
+              <div class="card-meta"><span>2026-07-18 · 8 分钟</span><a class="arrow" href="notes/week-2026-07-14-19.html#workflow">阅读 →</a></div>
             </article>
           </div>
           <div class="empty" id="emptyState">没有找到匹配的笔记。试试更短的关键词，例如“IPC”或“Linux”。</div>
@@ -397,7 +425,7 @@
             <span class="tag">About</span>
             <h3>这是一个会持续生长的技术知识库</h3>
             <p>用于沉淀日常学习日志、设备结构、操作流程、命令速查与故障排查。每篇内容尽量回答三个问题：发生了什么、为什么、下次怎么做。</p>
-            <div class="card-meta"><span>Built with GitHub Pages</span><a class="arrow" href="https://github.com/shirleyjiang233-dev/jxy" target="_blank" rel="noreferrer">查看源码 ↗</a></div>
+            <div class="card-meta"><span>Built with GitHub Pages</span><a class="arrow" href="https://github.com/xiangyi-jiang233/jxy" target="_blank" rel="noreferrer">查看源码 ↗</a></div>
           </div>
         </section>
       </div>
