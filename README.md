@@ -4,7 +4,7 @@
 
 ## 网站地址
 
-<https://shirleyjiang233-dev.github.io/jxy/>
+<https://xiangyi-jiang233.github.io/jxy/>
 
 ## 当前内容
 
@@ -13,6 +13,11 @@
 - SSH 与 SCP 文件传输思路
 - Linux 常用命令速查
 - ROS 2 与依赖拉取问题排查
+- 2026-07-14 至 07-19 周知识专题
+- Failcase 判定与 Lichtblick 回放
+- Docker、DDS、CycloneDDS 与 Tailscale
+- TF、TF 树、MCAP 与 rosbag
+- 数据切割、Issue 绑定与算法复现闭环
 
 ## 更新方式
 
